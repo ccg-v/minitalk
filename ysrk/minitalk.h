@@ -5,6 +5,7 @@
 # include <signal.h>
 # include <stdlib.h>
 # include <string.h>
+# include <stdio.h>
 // # include "../libft/include/libft.h"
 
 /*

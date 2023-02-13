@@ -6,29 +6,13 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 22:54:34 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/13 23:28:33 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/02/08 23:26:59 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	ft_putendl_fd(char *s)
-{
-	int	i;
-
-	i = 0;
-	if (s == 0)
-		return;
-	while (s[i] != '\0')
-	{
-		write(1, &s[i], 1);
-		i++;
-	}
-	write(1, "\n", 1);
-}
-
-static void	ft_rebuild_strlen(char **message, int *current_bit, int *flag, \
-		int signal)
+static  void    ft_rebuild_strlen(char **message, int *current_bit, int *flag, int signal)
 {
 	static int	message_len;
 
@@ -41,14 +25,14 @@ static void	ft_rebuild_strlen(char **message, int *current_bit, int *flag, \
 	}
 	else
 	{
-		*flag = 1;
+		*flag  = 1;
 		*message = calloc((message_len + 1), sizeof(char));
 		*current_bit = 0;
 		message_len = 0;
-		return ;
+		return;
 	}
 }
-/*
+
 static void	ft_print_message(char *message, int i)
 {
 	while (message[i] != 0)
@@ -59,59 +43,27 @@ static void	ft_print_message(char *message, int i)
 	write(1, "\n", 1);
 	free(message);
 }
-*/
 
-static void	ft_restart_variables(int *flag, char **message, int *i)
-{
-	*flag = 0;
-	if (message)
-	{
-		ft_putendl_fd(*message);
-		free(*message);
-		*message = 0;
-	}
-	*i = 0;
-}
-
-/*
-static void	ft_rebuild_char(char **message, int *octet, int *current_bit, \
-		int *flag, int *i, int signal)
+static void    ft_rebuild_char(char **message, int *octet, int *current_bit, int *flag, int *i, int signal)
 {
 	if (signal == SIGUSR2)
 		*octet = (*octet | 1 << *current_bit);
 	if (*current_bit == 7)
  	{
-		*message[*i] = *octet;
+ 		*message[*i] = *octet;
 		(*i)++;
  		*current_bit = 0;
 		if (*octet == 0)
 		{
 			flag = 0;
-            ft_print_message(*message, *i);
+            		ft_print_message(*message, *i);
+			flag = 0;
 			*message = 0;
 			*i = 0;
 		}
      		*octet = 0;
 		return;
  	}
-	(*current_bit)++;
-}
-*/
-static void ft_rebuild_char(char **message, int *octet, int *current_bit, \
-		int *flag, int *i, int signal)
-{
-	if (signal == SIGUSR2)
-		*octet = (*octet | 1 << *current_bit);
-	if (*current_bit == 7)
-	{
-		*message[*i] = *octet;
-		(*i)++;
-		*current_bit = 0;
-		if (*octet == 0)
-			return (ft_restart_variables(flag, message, i));
-		*octet = 0;
-		return;
-	}
 	(*current_bit)++;
 }
 
