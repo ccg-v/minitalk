@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 22:54:34 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/13 23:28:33 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/02/14 22:09:53 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,9 @@ static void	ft_rebuild_strlen(char **message, int *current_bit, int *flag, \
 	static int	message_len;
 
 	message_len = 0;
-	if (*current_bit < 32)
-	{
-		if (signal == SIGUSR2)
-			message_len = (message_len | 1 << *current_bit);
-		(*current_bit)++;
-	}
-	else
+	if (signal == SIGUSR2)
+		message_len = (message_len | 1 << *current_bit);
+	if (*current_bit == 31)
 	{
 		*flag = 1;
 		*message = calloc((message_len + 1), sizeof(char));
@@ -47,6 +43,7 @@ static void	ft_rebuild_strlen(char **message, int *current_bit, int *flag, \
 		message_len = 0;
 		return ;
 	}
+	(*current_bit)++;
 }
 /*
 static void	ft_print_message(char *message, int i)
@@ -97,6 +94,7 @@ static void	ft_rebuild_char(char **message, int *octet, int *current_bit, \
 	(*current_bit)++;
 }
 */
+/*
 static void ft_rebuild_char(char **message, int *octet, int *current_bit, \
 		int *flag, int *i, int signal)
 {
@@ -114,7 +112,7 @@ static void ft_rebuild_char(char **message, int *octet, int *current_bit, \
 	}
 	(*current_bit)++;
 }
-
+*/
 static void	ft_rebuild_string(int signal)
 {
 	static int	octet;
@@ -123,16 +121,25 @@ static void	ft_rebuild_string(int signal)
 	static int	i;
 	static char	*message;
 
-	octet = 0;
-	current_bit = 0;
-	flag = 0;
-	i = 0;
-	*message = 0;
-
 	if (flag == 0)
 		ft_rebuild_strlen(&message, &current_bit, &flag, signal);
 	else
-		ft_rebuild_char(&message, &octet, &current_bit, &flag, &i, signal);
+//		ft_rebuild_char(&message, &octet, &current_bit, &flag, &i, signal);
+	{
+		if (signal == SIGUSR2)
+			octet = (octet | 1 << current_bit);
+		if (current_bit == 7)
+		{
+			message[i] = octet;
+			i++;
+			current_bit = 0;
+			if (octet == 0)
+				return (ft_restart_variables(&flag, &message, &i));
+			octet = 0;
+			return;
+		}
+		current_bit++;
+	}
 }
 
 int main(void)

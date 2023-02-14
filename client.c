@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/13 21:45:20 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/02/14 22:21:54 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	ft_strlen(char *s)
 	len = 0;
 	while (s[len] != '\0')
 		len++;
-printf("len in CLIENT ft_strlen = %d\n", len);
 	return (len);
 }
 
@@ -30,7 +29,6 @@ static void	ft_send_strlen(int pid, int len)
 	int	i;
 
 	i = 0;;
-printf("len in CLIENT ft_send_strlen = %d\n", len);
 	while (i < 32)
 	{
 //		if (len & 1)
@@ -65,7 +63,6 @@ int	main(int argc, char **argv)
 	int	pid;
 	int	len;
 	char	*s;
-	int	i;
 //	t_struct	data;
 
 	if (argc == 3)
@@ -74,20 +71,12 @@ int	main(int argc, char **argv)
 		s = argv[2];
 		len = ft_strlen(s);
 		ft_send_strlen(pid, len);
-		i = 0;
-		while (s[i] != '\0')
-		{
-			ft_send_signal(pid, s[i]);
-			i++;
-		}
-/*		while (*s)
+		while (*s)
 		{
 			ft_send_signal(pid, *s);
 			s++;
 		}
-*/
-		ft_send_signal(pid, '\n');
-		ft_send_signal(pid, s[i]);
+		ft_send_signal(pid, *s);
 	}
 	else
 	{
