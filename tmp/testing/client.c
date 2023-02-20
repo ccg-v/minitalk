@@ -6,11 +6,13 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/20 22:49:35 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/02/20 22:15:45 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+//int	len;
 
 int	ft_strlen(char *s)
 {
@@ -50,7 +52,7 @@ static void	ft_send_signal(int pid, unsigned char octet)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(100);
+		usleep(200);
 		i++;
 	}
 }
@@ -80,5 +82,4 @@ int	main(int argc, char **argv)
 		printf("(Three parameters needed: executable name, ");
 		printf("parent process ID (pid) and a string to send)\n");
 	}
-	return (0);
 }

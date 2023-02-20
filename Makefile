@@ -6,26 +6,48 @@
 #    By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 20:00:04 by ccarrace          #+#    #+#              #
-#    Updated: 2023/01/24 23:29:44 by ccarrace         ###   ########.fr        #
+#    Updated: 2023/02/20 22:33:42 by ccarrace         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
+# .................................. Constants .................................
 
-CFLAGS = -MD -Wall -Wextra -Werror
+CC 				= 	gcc
 
-HEADER = minitalk.h
+CFLAGS 			= 	-MD -Wall -Wextra -Werror
 
-SRC_FILES = client.c
-			server.c
+# .............................. Macros/variables ..............................
 
-OBJ_FILES = $(SRC_FILES:.c=.o)
+HEADER 			= 	minitalk.h
 
-DEP_FILES = $(OBJ_FILES:.o=.d)
+NAME_SERVER		=	server
+SRCS_SERVER		= 	server.c
+OBJS_SERVER 	= 	$(SRCS_SERVER:.c=.o)
+DEPS_SERVER		= 	$(OBJS_SERVER:.o=.d)
 
-all: $(NAME)
+NAME_CLIENT		= 	client
+SRCS_CLIENT		=	client.c
+OBJS_CLIENT 	= 	$(SRC_CLIENT:.c=.o)
+DEPS_CLIENT		= 	$(DEPS_SERVER:.o=.d)
 
-$(NAME) : $(OBJ_FILES)
-	ar -rcs $(NAME) $(OBJ_FILES)
+# ................................... Rules ...................................
+
+all:	$(NAME_SERVER) $(NAME_CLIENT)
+
+$(NAME_SERVER):	$(OBJS_SERVER)
+					$(CC) $(FLAGS) $(SRCS_SERVER) -o server
+
+$(NAME_CLIENT):	$(OBJS_CLIENT)
+					$(CC) $(FLAGS) $(SRCS_CLIENT) -o client
 
 
+# ................................. Cleaning ..................................
+
+clean:
+					rm -f $(SERVER_OBJS) $(CLIENT_OBJS)
+
+fclean:	clean
+
+re:		fclean all
+
+.PHONY:	all clean fclean re

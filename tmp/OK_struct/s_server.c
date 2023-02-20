@@ -6,28 +6,28 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 22:54:34 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/20 22:35:14 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/02/20 19:33:49 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static void	ft_rebuild_strlen(t_data *g_data,	int signal)
+static void	ft_rebuild_strlen(t_data *data,	int signal)
 {
 	int	message_len;
 
 	message_len = 0;
 	if (signal == SIGUSR2)
-		message_len = (message_len | 1 << g_data->current_bit);
-	if (g_data->current_bit == 31)
+		message_len = (message_len | 1 << data->current_bit);
+	if (data->current_bit == 31)
 	{
-		g_data->flag = 1;
-		g_data->message = calloc((message_len + 1), sizeof(char));
-		g_data->current_bit = 0;
+		data->flag = 1;
+		data->message = calloc((message_len + 1), sizeof(char));
+		data->current_bit = 0;
 		message_len = 0;
 		return ;
 	}
-	(g_data->current_bit)++;
+	(data->current_bit)++;
 }
 
 static void	ft_print_and_reset(char **pointer, char *message, int *i, \
@@ -48,37 +48,40 @@ static void	ft_print_and_reset(char **pointer, char *message, int *i, \
 	*flag = 0;
 }
 
-static void	ft_rebuild_char(t_data *g_data, int signal)
+static void ft_rebuild_char(t_data *data, int signal)
 {
 	if (signal == SIGUSR2)
-		g_data->octet = (g_data->octet | 1 << g_data->current_bit);
-	if (g_data->current_bit == 7)
+		data->octet = (data->octet | 1 << data->current_bit);
+	if (data->current_bit == 7)
 	{
-		g_data->message[g_data->i] = g_data->octet;
-		g_data->i++;
-		g_data->current_bit = 0;
-		if (g_data->octet == '\0')
-			ft_print_and_reset(&g_data->message, g_data->message, &g_data->i, \
-					&g_data->flag);
-		g_data->octet = 0;
+		data->message[data->i] = data->octet;
+		data->i++;
+		data->current_bit = 0;
+		if (data->octet == 0)
+			ft_print_and_reset(&data->message, data->message, &data->i, &data->flag);
+		data->octet = 0;
 		return ;
 	}
-	g_data->current_bit++;
+	data->current_bit++;
 }
 
 static void	ft_rebuild_string(int signal)
 {
-	static t_data	g_data;
+	static t_data	data;
 
-	if (g_data.flag == 0)
-		ft_rebuild_strlen(&g_data, signal);
+	if (data.flag == 0)
+		ft_rebuild_strlen(&data, signal);
 	else
 	{
-		ft_rebuild_char(&g_data, signal);
+		ft_rebuild_char(&data, signal);
+//		if (data.octet == 0)
+//			ft_print_and_reset(&data.message, data.message, &data.i, &data.flag);
+//		data.octet = 0;
+//		return ;
 	}
 }
 
-int	main(void)
+int main(void)
 {
 	printf("The ID of the parent process (pid) is %d\n", getpid());
 	signal(SIGUSR1, ft_rebuild_string);
