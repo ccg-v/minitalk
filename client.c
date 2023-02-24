@@ -6,22 +6,22 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/23 21:51:41 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/02/24 22:58:15 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-int	ft_strlen(char *s)
+/*
+size_t ft_strlen(char *s)
 {
-	int	len;
+	size_t	len;
 
 	len = 0;
-	while (s[len] != '\0')
+	while (*s++)
 		len++;
 	return (len);
 }
-
+*/
 static void	ft_send_strlen(int pid, int len)
 {
 	int	i;
@@ -58,12 +58,12 @@ static void	ft_send_signal(int pid, unsigned char octet)
 int	main(int argc, char **argv)
 {
 	int		pid;
-	int		len;
+	size_t	len;
 	char	*s;
 
 	if (argc == 3)
 	{
-		pid = atoi(argv[1]);
+		pid = ft_atoi(argv[1]);
 		s = argv[2];
 		len = ft_strlen(s);
 		ft_send_strlen(pid, len);

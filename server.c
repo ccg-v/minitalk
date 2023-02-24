@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 22:54:34 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/20 22:35:14 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/02/24 22:53:52 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	ft_rebuild_strlen(t_data *g_data,	int signal)
 	if (g_data->current_bit == 31)
 	{
 		g_data->flag = 1;
-		g_data->message = calloc((message_len + 1), sizeof(char));
+		g_data->message = ft_calloc((message_len + 1), sizeof(char));
 		g_data->current_bit = 0;
 		message_len = 0;
 		return ;
