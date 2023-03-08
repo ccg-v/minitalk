@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 22:54:34 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/24 22:53:52 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/08 22:54:17 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	ft_rebuild_string(int signal)
 
 int	main(void)
 {
-	printf("The ID of the parent process (pid) is %d\n", getpid());
+	ft_printf("The ID of the parent process (pid) is %d\n", getpid());
 	signal(SIGUSR1, ft_rebuild_string);
 	signal(SIGUSR2, ft_rebuild_string);
 	while (1)

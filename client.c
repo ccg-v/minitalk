@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/02/24 22:58:15 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/08 22:55:27 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		printf("No arguments or wrong arguments supplied!\n");
-		printf("(Three parameters needed: executable name, ");
-		printf("parent process ID (pid) and a string to send)\n");
+		ft_printf("No arguments or wrong arguments supplied!\n");
+		ft_printf("(Three parameters needed: executable name, ");
+		ft_printf("parent process ID (pid) and a string to send)\n");
 	}
 	return (0);
 }
