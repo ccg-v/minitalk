@@ -6,22 +6,12 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/08 22:55:27 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:41:15 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-/*
-size_t ft_strlen(char *s)
-{
-	size_t	len;
 
-	len = 0;
-	while (*s++)
-		len++;
-	return (len);
-}
-*/
 static void	ft_send_strlen(int pid, int len)
 {
 	int	i;
