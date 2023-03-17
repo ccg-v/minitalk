@@ -6,7 +6,7 @@
 #    By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 20:00:04 by ccarra:ce          #+#    #+#             #
-#    Updated: 2023/03/16 16:16:04 by ccarrace         ###   ########.fr        #
+#    Updated: 2023/03/16 13:16:57 by ccarrace         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ BOLD_YELLOW		=	\033[1;33m
 DEF_COLOR		=	\033[0m
 
 CC				= 	gcc
-CFLAGS 			= 	-MD -Wall -Wextra -Werror -fsanitize=address
+CFLAGS 			= 	-MD -Wall -Wextra -Werror
 HEADER 			= 	minitalk.h
 
 LIBFT_NAME		=	libft.a
@@ -36,14 +36,6 @@ SERVER_SRCS		= 	server.c
 CLIENT_NAME		= 	client
 CLIENT_SRCS		=	client.c
 
-# Bonus
-
-B_SERVER_NAME	= 	server_bonus
-B_SERVER_SRCS	=	server_bonus.c
-
-B_CLIENT_NAME	=	client_bonus
-B_CLIENT_SRCS	=	client_bonus.c
-
 # |-----------------------|     Macros/variables     |-----------------------| #
 
 # Mandatory
@@ -53,21 +45,12 @@ SERVER_DEPS		=	$(SERVER_OBJS:.o=.d)
 
 CLIENT_OBJS		=	$(CLIENT_SRCS:.c=.o)
 CLIENT_DEPS		=	$(CLIENT_OBJS:.o=.d)
- 
-# Bonus
-
-B_SERVER_OBJS	=	$(B_SERVER_SRCS:.c=.o)
-B_SERVER_DEPS	=	$(B_SERVER_OBJS:.o=.d)
-
-B_CLIENT_OBJS	=	$(B_CLIENT_SRCS:.c=.o)
-B_CLIENT_DEPS	=	$(B_CLIENT_OBJS:.o=.d)
 
 # Common
 
 OBJS_DEPS_LST	=	$(shell find . -maxdepth 2 -name '*.o' -o -name '*.d')
 EXECUTS_LST		=	$(shell find . -maxdepth 2 -name $(SERVER_NAME) \
-					-o -name $(CLIENT_NAME) -o -name $(B_SERVER_NAME) \
-					-o -name $(B_CLIENT_NAME) -o -name $(LIBFT_NAME) \
+					-o -name $(CLIENT_NAME) -o -name $(LIBFT_NAME) \
 					-o -name $(PRINTF_NAME))
 
 # |-----------------------|    Compilation rules     |-----------------------| #
@@ -88,22 +71,6 @@ $(CLIENT_NAME):	$(HEADER) $(CLIENT_OBJS)
 				$(CC) $(CFLAGS) $(CLIENT_SRCS) -L$(LIBFT_DIR) -lft -L$(PRINTF_DIR) -lftprintf -o $(CLIENT_NAME)
 				$(MSG_OK_CLIENT)
 
-# Bonus
-
-bonus:			
-					@$(MAKE) -s -C $(LIBFT_DIR)
-					@$(MAKE) -s -C $(PRINTF_DIR)
-					@$(MAKE) -s $(B_SERVER_NAME) 
-					@$(MAKE) -s $(B_CLIENT_NAME)
-
-$(B_SERVER_NAME):	$(HEADER) $(B_SERVER_OBJS)
-					$(CC) $(CFLAGS) $(B_SERVER_SRCS)  -L$(LIBFT_DIR) -lft -L$(PRINTF_DIR) -lftprintf -o $(B_SERVER_NAME)
-					$(MSG_OK_B_SERVER)
-
-$(B_CLIENT_NAME):	$(HEADER) $(B_CLIENT_OBJS)
-					$(CC) $(CFLAGS) $(B_CLIENT_SRCS)  -L$(LIBFT_DIR) -lft -L$(PRINTF_DIR) -lftprintf -o $(B_CLIENT_NAME)
-					$(MSG_OK_B_CLIENT)
-
 # Common
 
 #%.o: %.c
@@ -113,8 +80,6 @@ $(B_CLIENT_NAME):	$(HEADER) $(B_CLIENT_OBJS)
 
 MSG_OK_SERVER	=	echo "$(BOLD_YELLOW)Server executable compiled$(DEF_COLOR)"
 MSG_OK_CLIENT	=	echo "$(BOLD_YELLOW)Client executable compiled$(DEF_COLOR)"
-MSG_OK_B_SERVER	=	echo "$(BOLD_YELLOW)Bonus server executable compiled$(DEF_COLOR)"
-MSG_OK_B_CLIENT	=	echo "$(BOLD_YELLOW)Bonus client executable compiled$(DEF_COLOR)"
 MSG_CLEAN		=	echo "$(BOLD_YELLOW)Removing object and dependency files...$(DEF_COLOR)"
 MSG_FCLEAN		=	echo "$(BOLD_YELLOW)Removing executable files...$(DEF_COLOR)"
 
@@ -122,7 +87,6 @@ MSG_FCLEAN		=	echo "$(BOLD_YELLOW)Removing executable files...$(DEF_COLOR)"
 
 clean:
 		@rm -f $(SERVER_DEPS) $(SERVER_OBJS) $(CLIENT_DEPS) $(CLIENT_OBJS)
-		@rm -f $(B_SERVER_DEPS) $(B_SERVER_OBJS) $(B_CLIENT_DEPS) $(B_CLIENT_OBJS)
 		@$(MAKE) clean -C $(LIBFT_DIR)
 		@$(MAKE) clean -C $(PRINTF_DIR)
 		@$(MSG_CLEAN)
@@ -135,7 +99,6 @@ endif
 
 fclean:	clean
 		@rm -f $(SERVER_NAME) $(CLIENT_NAME) 
-		@rm -f $(B_SERVER_NAME) $(B_CLIENT_NAME)
 		@$(MAKE) fclean -C $(LIBFT_DIR)
 		@$(MAKE) fclean -C $(PRINTF_DIR)
 		@$(MSG_FCLEAN)
@@ -150,4 +113,4 @@ re:		fclean all
 
 .PHONY:	all clean fclean re bonus
 
-#-include $(SERVER_DEPS) $(CLIENT_DEPS) $(B_SERVER_DEPS) $(B_CLIENT_DEPS) *.d
+#-include $(SERVER_DEPS) $(CLIENT_DEPS) *.d
