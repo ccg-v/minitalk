@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 22:54:34 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/16 13:30:54 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:05:41 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ static void	ft_rebuild_bufsize(int signal)
 	if (g_data.current_bit == 31)
 	{
 		g_data.flag = 1;
-		g_data.buffer = calloc((g_data.buffer_size + 1), sizeof(char));
+		g_data.buffer = ft_calloc((g_data.buffer_size + 1), sizeof(char));
 		if (g_data.buffer == NULL)
 		{
-			printf("Memory allocation failed!\n");
+			ft_putstr_fd(RED"Memory allocation failed!\n"DEF_COLOR, 1);
 			return ;
 		}
 		g_data.current_bit = 0;
@@ -36,7 +36,18 @@ static void	ft_rebuild_bufsize(int signal)
 
 static void	ft_print_and_reset(void)
 {
-	ft_printf("%s\n", g_data.buffer);
+	int	j;
+
+	j = 0;
+	while (g_data.buffer[j] != '\0')
+	{
+		write(1, &(g_data.buffer[j]), 1);
+		j++;
+	}
+	write(1, "\n", 1);
+	ft_putstr_fd(B_WHITE"-- ", 1);
+	ft_putnbr_fd(j, 1);
+	ft_putstr_fd(" characters displayed --\n"DEF_COLOR, 1);
 	free(g_data.buffer);
 	g_data.buffer = NULL;
 	g_data.buffer_size = 0;
@@ -64,20 +75,27 @@ static void	ft_rebuild_char(int signal)
 	(g_data.current_bit)++;
 }
 
-static void	ft_rebuild_buffer(int signal)
+static void	ft_rebuild_buffer(int signal, siginfo_t *info, void *context)
 {
+	(void)context;
+	(void)*info;
 	if (g_data.flag == 0)
 		ft_rebuild_bufsize(signal);
 	else
 		ft_rebuild_char(signal);
-	return ;
 }
 
 int	main(void)
 {
-	ft_printf("Server's pid is %d\n", getpid());
-	signal(SIGUSR1, ft_rebuild_buffer);
-	signal(SIGUSR2, ft_rebuild_buffer);
+	struct sigaction	newact;
+
+	ft_putstr_fd(GREEN"Server's pid is ", 1);
+	ft_putnbr_fd(getpid(), 1);
+	ft_putstr_fd("\n"DEF_COLOR, 1);
+	newact.sa_sigaction = ft_rebuild_buffer;
+	newact.sa_flags = SA_RESTART;
+	sigaction(SIGUSR1, &newact, NULL);
+	sigaction(SIGUSR2, &newact, NULL);
 	while (1)
 		pause();
 }

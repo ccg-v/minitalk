@@ -6,13 +6,33 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/17 22:41:15 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:05:49 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static void	ft_send_strlen(int pid, int len)
+static int	ft_error_control(char *str, pid_t pid)
+{
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+		{	
+			ft_putstr_fd(RED"Pid not valid!\n"DEF_COLOR, 1);
+			return (-1);
+		}
+		str++;
+	}
+	if (kill(pid, 0) != 0)
+	{
+		ft_putstr_fd(RED"There is no process running with that pid!\n" \
+				DEF_COLOR, 1);
+		return (-1);
+	}
+	return (0);
+}
+
+static void	ft_send_strlen(pid_t pid, int len)
 {
 	int	i;
 
@@ -29,7 +49,7 @@ static void	ft_send_strlen(int pid, int len)
 	}
 }
 
-static void	ft_send_signal(int pid, unsigned char octet)
+static void	ft_send_signal(pid_t pid, unsigned char octet)
 {
 	int	i;
 
@@ -47,28 +67,24 @@ static void	ft_send_signal(int pid, unsigned char octet)
 
 int	main(int argc, char **argv)
 {
-	int		pid;
-	size_t	len;
-	char	*s;
+	pid_t		pid;
+	char		*str;
 
-	if (argc == 3)
-	{
-		pid = ft_atoi(argv[1]);
-		s = argv[2];
-		len = ft_strlen(s);
-		ft_send_strlen(pid, len);
-		while (*s)
-		{
-			ft_send_signal(pid, *s);
-			s++;
-		}
-		ft_send_signal(pid, *s);
-	}
+	if (argc != 3)
+		ft_putstr_fd(RED"Wrong number of arguments supplied!\n"DEF_COLOR, 1);
 	else
 	{
-		ft_printf("No arguments or wrong arguments supplied!\n");
-		ft_printf("(Three parameters needed: executable name, ");
-		ft_printf("parent process ID (pid) and a string to send)\n");
+		pid = ft_atoi(argv[1]);
+		if (ft_error_control(argv[1], pid) == -1)
+			return (0);
+		str = argv[2];
+		ft_send_strlen(pid, ft_strlen(str));
+		ft_putstr_fd(B_WHITE"-- Sending ", 1);
+		ft_putnbr_fd(ft_strlen(str), 1);
+		ft_putstr_fd(" characters... --\n"DEF_COLOR, 1);
+		while (*str)
+			ft_send_signal(pid, *str++);
+		ft_send_signal(pid, *str);
 	}
 	return (0);
 }
