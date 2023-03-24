@@ -6,7 +6,7 @@
 #    By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 20:00:04 by ccarra:ce          #+#    #+#             #
-#    Updated: 2023/03/24 20:19:33 by ccarrace         ###   ########.fr        #
+#    Updated: 2023/03/24 21:29:39 by ccarrace         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -137,8 +137,10 @@ else
 	@echo "$(YELLOW)$(EXECUTS_LST)$(DEF_COLOR) deleted"
 endif
 		
-re:		fclean all
+re:			fclean all
 
-.PHONY:	all clean fclean re bonus
+rebonus:	fclean bonus
 
--include $(SERVER_DEPS) $(CLIENT_DEPS) $(B_SERVER_DEPS) $(B_CLIENT_DEPS) *.d
+.PHONY:	all clean fclean re rebonus
+
+#-include $(SERVER_DEPS) $(CLIENT_DEPS) $(B_SERVER_DEPS) $(B_CLIENT_DEPS) *.d
