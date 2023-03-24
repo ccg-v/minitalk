@@ -6,13 +6,13 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 21:18:06 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/24 20:06:25 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:34:22 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static int	ft_error_control(char *str, int pid)
+static int	ft_error_control(char *str, pid_t pid)
 {
 	while (*str)
 	{
@@ -32,7 +32,7 @@ static int	ft_error_control(char *str, int pid)
 	return (0);
 }
 
-static void	ft_send_strlen(int pid, int len)
+static void	ft_send_strlen(pid_t pid, int len)
 {
 	int	i;
 
@@ -49,7 +49,7 @@ static void	ft_send_strlen(int pid, int len)
 	}
 }
 
-static void	ft_send_signal(int pid, unsigned char octet)
+static void	ft_send_signal(pid_t pid, unsigned char octet)
 {
 	int	i;
 
