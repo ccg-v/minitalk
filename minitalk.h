@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 22:27:29 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/24 20:04:44 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/25 14:08:34 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 
 typedef struct s_data
 {
-	char	*buffer;
-	int		buffer_size;
+	char	*string;
+	int		string_len;
 	int		octet;
 	int		current_bit;
 	int		i;
