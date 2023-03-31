@@ -6,14 +6,28 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/24 21:14:47 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/31 23:41:49 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static int	ft_error_control(char *str, pid_t pid)
+static int	ft_error_control(pid_t pid)
 {
+	char	*str;
+
+	str = ft_itoa(pid);
+	if (pid == 0)
+	{
+			ft_putstr_fd(RED"Pid not valid!\n"DEF_COLOR, 1);
+			return (-1);
+	}
+	if (kill(pid, 0) != 0)
+	{
+		ft_putstr_fd(RED"There is no process running with that pid!\n" \
+				DEF_COLOR, 1);
+		return (-1);
+	}
 	while (*str)
 	{
 		if (!ft_isdigit(*str))
@@ -22,12 +36,6 @@ static int	ft_error_control(char *str, pid_t pid)
 			return (-1);
 		}
 		str++;
-	}
-	if (kill(pid, 0) != 0)
-	{
-		ft_putstr_fd(RED"There is no process running with that pid!\n" \
-				DEF_COLOR, 1);
-		return (-1);
 	}
 	return (0);
 }
@@ -75,7 +83,7 @@ int	main(int argc, char **argv)
 	else
 	{
 		pid = ft_atoi(argv[1]);
-		if (ft_error_control(argv[1], pid) == -1)
+		if (ft_error_control(pid) == -1)
 			return (0);
 		str = argv[2];
 		ft_send_strlen(pid, ft_strlen(str));

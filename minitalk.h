@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 22:27:29 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/25 14:08:34 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/03/30 22:22:22 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <stdlib.h>
 # include <signal.h>	
 # include <unistd.h>
-# include "libft/libft.h"
+# include "libft.h"
 
 # define RED		"\033[0;31m"
 # define GREEN 		"\033[0;32m"
