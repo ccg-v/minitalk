@@ -6,7 +6,7 @@
 #    By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 20:00:04 by ccarra:ce          #+#    #+#             #
-#    Updated: 2023/03/31 22:43:30 by ccarrace         ###   ########.fr        #
+#    Updated: 2023/04/01 19:18:51 by ccarrace         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ DEF_COLOR		=	\033[0m
 # --- Constants -------------------------------------------------------------- #
 
 CC				= 	gcc
-CFLAGS 			= 	-MMD -Wall -Wextra -Werror -I libft
+CFLAGS 			= 	-MMD -Wall -Wextra -Werror
 HEADER_NAME		= 	minitalk.h
 
 LIB_NAME		=	libft.a
@@ -81,12 +81,12 @@ all:
 				$(MAKE) $(SERVER_NAME)
 				$(MAKE) $(CLIENT_NAME)	
 
-$(SERVER_NAME):	$(SERVER_OBJS)
-				$(CC) $(CFLAGS) $(SERVER_OBJS) $(INCLUDE_HEADER) $(INCLUDE_LIB) -o $@
+$(SERVER_NAME):	$(SERVER_OBJS) $(LIB_DIR)$(LIB_NAME)
+				$(CC) $(CFLAGS) $(SERVER_OBJS) $(INCLUDE_LIB) -o $@
 				@$(MSG_OK_SERVER)
 
-$(CLIENT_NAME):	$(CLIENT_OBJS)
-				$(CC) $(CFLAGS) $(CLIENT_OBJS) $(INCLUDE_HEADER) $(INCLUDE_LIB) -o $@
+$(CLIENT_NAME):	$(CLIENT_OBJS) $(LIB_DIR)$(LIB_NAME)
+				$(CC) $(CFLAGS) $(CLIENT_OBJS) $(INCLUDE_LIB) -o $@
 				@$(MSG_OK_CLIENT)
 
 # Bonus
@@ -96,18 +96,18 @@ bonus:
 					$(MAKE) $(B_SERVER_NAME) 
 					$(MAKE) $(B_CLIENT_NAME)
 
-$(B_SERVER_NAME):	$(B_SERVER_OBJS)
-					$(CC) $(CFLAGS) $(B_SERVER_OBJS) $(INCLUDE_HEADER) $(INCLUDE_LIB) -o $@
+$(B_SERVER_NAME):	$(B_SERVER_OBJS) $(LIB_DIR)$(LIB_NAME)
+					$(CC) $(CFLAGS) $(B_SERVER_OBJS) $(INCLUDE_LIB) -o $@
 					@$(MSG_OK_B_SERVER) 
 
-$(B_CLIENT_NAME):	$(B_CLIENT_OBJS)
-					$(CC) $(CFLAGS) $(B_CLIENT_OBJS) $(INCLUDE_HEADER) $(INCLUDE_LIB) -o $@
+$(B_CLIENT_NAME):	$(B_CLIENT_OBJS) $(LIB_DIR)$(LIB_NAME)
+					$(CC) $(CFLAGS) $(B_CLIENT_OBJS) $(INCLUDE_LIB) -o $@
 					@$(MSG_OK_B_CLIENT)
 
 # Common
 
-%.o: %.c $(HEADER_NAME)
-	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) -I $(LIB_DIR) -c $< -o $@
 
 -include $(SERVER_DEPS) $(CLIENT_DEPS) $(B_SERVER_DEPS) $(B_CLIENT_DEPS)
 

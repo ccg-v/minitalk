@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/31 23:41:49 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/04/02 00:31:33 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,16 @@ static void	ft_send_strlen(pid_t pid, int len)
 	}
 }
 
-static void	ft_send_signal(pid_t pid, unsigned char octet)
+static int	ft_send_signal(pid_t pid, unsigned char octet)
 {
 	int	i;
 
 	i = 0;
+	if (kill(pid, 0) != 0)
+	{
+		ft_putstr_fd(RED"Client says: 'Server interrupted by user'\n", 1);
+		return (-1);
+	}
 	while (i < 8)
 	{
 		if ((octet & 1 << i) == 0)
@@ -71,6 +76,7 @@ static void	ft_send_signal(pid_t pid, unsigned char octet)
 		usleep(100);
 		i++;
 	}
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -89,9 +95,14 @@ int	main(int argc, char **argv)
 		ft_send_strlen(pid, ft_strlen(str));
 		ft_putstr_fd(B_WHITE"-- Sending ", 1);
 		ft_putnbr_fd(ft_strlen(str), 1);
-		ft_putstr_fd(" characters... --\n"DEF_COLOR, 1);
+		ft_putstr_fd(" bytes... --\n"DEF_COLOR, 1);
 		while (*str)
-			ft_send_signal(pid, *str++);
+		{
+			if (ft_send_signal(pid, *str) == -1)
+				return (0);
+			else
+				str++;
+		}
 		ft_send_signal(pid, *str);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 22:54:34 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/31 23:41:38 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/04/02 00:31:27 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	ft_print_and_reset(void)
 	write(1, "\n", 1);
 	ft_putstr_fd(B_WHITE"-- ", 1);
 	ft_putnbr_fd(j, 1);
-	ft_putstr_fd(" characters displayed --\n"DEF_COLOR, 1);
+	ft_putstr_fd(" bytes displayed --\n"DEF_COLOR, 1);
 	free(g_data.string);
 	g_data.string = NULL;
 	g_data.string_len = 0;
@@ -65,12 +65,12 @@ static void	ft_rebuild_char(int signal)
 	if (g_data.current_bit == 7)
 	{
 		g_data.string[g_data.i] = g_data.octet;
-write(1, &(g_data.octet), 1);
+//write(1, &(g_data.octet), 1);
 		(g_data.i)++;
 		g_data.current_bit = 0;
 		if (g_data.octet == '\0')
 		{
-ft_putstr_fd(GREEN"\n-------- END OF WRITING CHAR BY CHAR --------\n"DEF_COLOR, 1);
+//ft_putstr_fd(GREEN"\n\n-------- END OF WRITING CHAR BY CHAR --------\n\n"DEF_COLOR, 1);
 			ft_print_and_reset();
 		}
 		g_data.octet = 0;
@@ -81,18 +81,15 @@ ft_putstr_fd(GREEN"\n-------- END OF WRITING CHAR BY CHAR --------\n"DEF_COLOR, 
 
 static void	ft_rebuild_string(int signal, siginfo_t *info, void *context)
 {
+	pid_t	client_pid;
+
 	(void)context;
-	(void)*info;
+	client_pid = 0;
+	client_pid = info->si_pid;
 	if (signal == SIGINT)
 	{
-		ft_putstr_fd("Server was closed by the user. End of the program\n", 1);
+		ft_putstr_fd(RED"\nServer says: 'Server interrupted by user'\n"DEF_COLOR, 1);
 		free(g_data.string);
-		g_data.string = NULL;
-		g_data.string_len = 0;
-		g_data.octet = 0;
-		g_data.current_bit = 0;
-		g_data.i = 0;
-		g_data.flag = 0;
 		exit(0);
 	}
 	else
@@ -116,6 +113,23 @@ int	main(void)
 	sigaction(SIGUSR1, &newact, NULL);
 	sigaction(SIGUSR2, &newact, NULL);
 	sigaction(SIGINT, &newact, NULL);
+
+int	boo;
+
 	while (1)
-		pause();
+	{
+		boo = g_data.current_bit;
+		sleep(1);
+		if (g_data.current_bit == boo)
+		{
+//			ft_putstr_fd(GREEN"\nServer awaiting...\n"DEF_COLOR, 1);
+			free(g_data.string);
+			g_data.string = NULL;
+			g_data.string_len = 0;
+			g_data.octet = 0;
+			g_data.current_bit = 0;
+			g_data.i = 0;
+			g_data.flag = 0;
+		}	
+	}
 }
