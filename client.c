@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 20:36:36 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/04/02 00:31:33 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/04/02 20:22:00 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static int	ft_error_control(pid_t pid)
 	str = ft_itoa(pid);
 	if (pid == 0)
 	{
-			ft_putstr_fd(RED"Pid not valid!\n"DEF_COLOR, 1);
-			return (-1);
+		ft_putstr_fd(RED"Pid not valid!\n"DEF_COLOR, 1);
+		return (-1);
 	}
 	if (kill(pid, 0) != 0)
 	{
@@ -64,7 +64,8 @@ static int	ft_send_signal(pid_t pid, unsigned char octet)
 	i = 0;
 	if (kill(pid, 0) != 0)
 	{
-		ft_putstr_fd(RED"Client says: 'Server interrupted by user'\n", 1);
+		ft_putstr_fd(RED"Server closed by user. ", 1);
+		ft_putstr_fd("Transmission interrupted'\n"DEF_COLOR, 1);
 		return (-1);
 	}
 	while (i < 8)

@@ -6,7 +6,7 @@
 /*   By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 21:16:41 by ccarrace          #+#    #+#             */
-/*   Updated: 2023/03/25 14:42:39 by ccarrace         ###   ########.fr       */
+/*   Updated: 2023/04/02 20:41:38 by ccarrace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	ft_print_and_reset(void)
 	int	j;
 
 	j = 0;
-	while (g_data.string[j])
+	while (g_data.string[j] != '\0')
 	{
 		write(1, &(g_data.string[j]), 1);
 		j++;
@@ -47,7 +47,7 @@ static void	ft_print_and_reset(void)
 	write(1, "\n", 1);
 	ft_putstr_fd(B_WHITE"-- ", 1);
 	ft_putnbr_fd(j, 1);
-	ft_putstr_fd(" characters displayed --\n"DEF_COLOR, 1);
+	ft_putstr_fd(" bytes displayed --\n"DEF_COLOR, 1);
 	free(g_data.string);
 	g_data.string = NULL;
 	g_data.string_len = 0;
@@ -94,6 +94,7 @@ static void	ft_rebuild_string(int signal, siginfo_t *info, void *context)
 int	main(void)
 {
 	struct sigaction	newact;
+	int					tmp;
 
 	ft_putstr_fd(GREEN"[Bonus]: Server_bonus pid is ", 1);
 	ft_putnbr_fd(getpid(), 1);
@@ -103,5 +104,18 @@ int	main(void)
 	sigaction(SIGUSR1, &newact, NULL);
 	sigaction(SIGUSR2, &newact, NULL);
 	while (1)
-		pause();
+	{
+		tmp = g_data.current_bit;
+		sleep(1);
+		if (g_data.current_bit == tmp)
+		{
+			free(g_data.string);
+			g_data.string = NULL;
+			g_data.string_len = 0;
+			g_data.octet = 0;
+			g_data.current_bit = 0;
+			g_data.i = 0;
+			g_data.flag = 0;
+		}
+	}
 }
