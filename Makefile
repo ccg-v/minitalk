@@ -6,15 +6,9 @@
 #    By: ccarrace <ccarrace@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/24 20:00:04 by ccarra:ce          #+#    #+#             #
-#    Updated: 2023/04/01 19:18:51 by ccarrace         ###   ########.fr        #
+#    Updated: 2023/04/03 19:50:53 by ccarrace         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# --- Colors ----------------------------------------------------------------- #
-
-YELLOW 			= 	\033[0;93m
-BOLD_YELLOW		=	\033[1;33m
-DEF_COLOR		=	\033[0m
 
 # --- Constants -------------------------------------------------------------- #
 
@@ -98,7 +92,7 @@ bonus:
 
 $(B_SERVER_NAME):	$(B_SERVER_OBJS) $(LIB_DIR)$(LIB_NAME)
 					$(CC) $(CFLAGS) $(B_SERVER_OBJS) $(INCLUDE_LIB) -o $@
-					@$(MSG_OK_B_SERVER) 
+					@$(MSG_OK_B_SERVER)
 
 $(B_CLIENT_NAME):	$(B_CLIENT_OBJS) $(LIB_DIR)$(LIB_NAME)
 					$(CC) $(CFLAGS) $(B_CLIENT_OBJS) $(INCLUDE_LIB) -o $@
@@ -111,44 +105,50 @@ $(B_CLIENT_NAME):	$(B_CLIENT_OBJS) $(LIB_DIR)$(LIB_NAME)
 
 -include $(SERVER_DEPS) $(CLIENT_DEPS) $(B_SERVER_DEPS) $(B_CLIENT_DEPS)
 
+# |-----------------------|      Cleaning rules      |-----------------------| #
+
+clean:
+
+ifeq ($(strip $(OBJS_DEPS_LST)),)
+	@$(MSG_NO_CLEAN)
+else
+	rm -f $(SERVER_OBJS) $(SERVER_DEPS) $(CLIENT_OBJS) $(CLIENT_DEPS)
+	rm -f $(B_SERVER_OBJS) $(B_SERVER_DEPS) $(B_CLIENT_OBJS) $(B_CLIENT_DEPS)
+	@$(MAKE) clean -C $(LIB_DIR)
+	@$(MSG_OK_CLEAN)
+endif
+
+fclean:	clean
+
+ifeq ($(strip $(EXECUTS_LST)),)
+	@$(MSG_NO_FCLEAN)
+else
+	rm -f $(SERVER_NAME) $(CLIENT_NAME) 
+	rm -f $(B_SERVER_NAME) $(B_CLIENT_NAME)
+	@$(MAKE) fclean -C $(LIB_DIR)
+	@$(MSG_OK_FCLEAN)
+endif
+		
+re:			fclean all
+
+rebonus:	fclean bonus
+
+# --- Colors ----------------------------------------------------------------- #
+
+YELLOW 			= 	\033[0;93m
+BOLD_YELLOW		=	\033[1;33m
+DEF_COLOR		=	\033[0m
+
 # |-----------------------|         Messages         |-----------------------| #
 
 MSG_OK_SERVER	=	echo "$(BOLD_YELLOW)Server executable compiled$(DEF_COLOR)"
 MSG_OK_CLIENT	=	echo "$(BOLD_YELLOW)Client executable compiled$(DEF_COLOR)"
 MSG_OK_B_SERVER	=	echo "$(BOLD_YELLOW)Server bonus executable compiled$(DEF_COLOR)"
 MSG_OK_B_CLIENT	=	echo "$(BOLD_YELLOW)Client bonus executable compiled$(DEF_COLOR)"
-MSG_CLEAN		=	echo "$(BOLD_YELLOW)Removing object and dependency files...$(DEF_COLOR)"
-MSG_FCLEAN		=	echo "$(BOLD_YELLOW)Removing executable files...$(DEF_COLOR)"
-
-# |-----------------------|      Cleaning rules      |-----------------------| #
-
-clean:
-		@rm -f $(SERVER_DEPS) $(SERVER_OBJS) $(CLIENT_DEPS) $(CLIENT_OBJS)
-		@rm -f $(B_SERVER_DEPS) $(B_SERVER_OBJS) $(B_CLIENT_DEPS) $(B_CLIENT_OBJS)
-		@$(MAKE) clean -C $(LIB_DIR)
-		@$(MSG_CLEAN)
-
-ifeq ($(strip $(OBJS_DEPS_LST)),)
-	@echo "No object or dependency files found to remove"
-else
-	@echo "$(YELLOW)$(OBJS_DEPS_LST)$(DEF_COLOR) deleted"
-endif
-
-fclean:	clean
-		@rm -f $(SERVER_NAME) $(CLIENT_NAME) 
-		@rm -f $(B_SERVER_NAME) $(B_CLIENT_NAME)
-		@$(MAKE) fclean -C $(LIB_DIR)
-		@$(MSG_FCLEAN)
-
-ifeq ($(strip $(EXECUTS_LST)),)
-	@echo "No executable files found to remove"
-else
-	@echo "$(YELLOW)$(EXECUTS_LST)$(DEF_COLOR) deleted"
-endif
-		
-re:			fclean all
-
-rebonus:	fclean bonus
+MSG_OK_CLEAN	=	echo "$(BOLD_YELLOW)Object and dependency files removed$(DEF_COLOR)"
+MSG_NO_CLEAN	=	echo "$(BOLD_YELLOW)No object or dependency files to remove$(DEF_COLOR)"
+MSG_OK_FCLEAN	=	echo "$(BOLD_YELLOW)Executable files removed$(DEF_COLOR)"
+MSG_NO_FCLEAN	=	echo "$(BOLD_YELLOW)No executable files found to remove$(DEF_COLOR)"
 
 .PHONY:	all clean fclean re rebonus
 
