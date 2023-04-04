@@ -1,4 +1,4 @@
 # minitalk
 <p align="center">
-	<img src=/assets/minitalk_pseudocode_.svg />
+	<img src=assets/minitalk_pseudocode_.svg />
 </p>
